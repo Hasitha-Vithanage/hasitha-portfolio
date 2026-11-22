@@ -1,7 +1,11 @@
 {
-  "name": "portfolio",
+  "name": "hasitha-portfolio",
   "version": "0.1.0",
   "description": "Immersive 3D developer portfolio",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Hasitha-Vithanage/hasitha-portfolio.git"
+  },
   "scripts": {
     "dev": "vite",
     "build": "tsc --noEmit && vite build",

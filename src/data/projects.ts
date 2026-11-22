@@ -229,7 +229,7 @@ export const projects: Project[] = [
     stack: ['React', 'TypeScript', 'Vite', 'Three.js', 'React Three Fiber', 'Drei', 'GSAP ScrollTrigger', 'Tailwind CSS', 'React Router'],
     status: 'Live',
     links: {
-      source: '[Add GitHub repository URL]',
+      source: 'https://github.com/Hasitha-Vithanage/hasitha-portfolio',
       demo: '/',
     },
     preview: 'portfolio',
