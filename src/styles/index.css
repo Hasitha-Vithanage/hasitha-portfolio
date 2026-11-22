@@ -1,0 +1,248 @@
+@import 'tailwindcss';
+
+@theme {
+  --color-ink: #090b0f;
+  --color-surface: #11151c;
+  --color-elevated: #171d26;
+  --color-lime: #b6ff4a;
+  --color-fg: #f5f7fa;
+  --color-muted: #9ca3af;
+  --color-line: rgb(156 163 175 / 0.14);
+  --color-line-strong: rgb(156 163 175 / 0.28);
+
+  --font-sans: 'Space Grotesk Variable', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
+
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@layer base {
+  html {
+    background: var(--color-ink);
+    color: var(--color-fg);
+    -webkit-text-size-adjust: 100%;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    scroll-padding-top: 5.5rem;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    html {
+      scroll-behavior: smooth;
+    }
+  }
+
+  body {
+    min-height: 100dvh;
+    overflow-x: clip;
+    font-family: var(--font-sans);
+    font-size: 1.0625rem;
+    line-height: 1.65;
+  }
+
+  ::selection {
+    background: var(--color-lime);
+    color: var(--color-ink);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-lime);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+
+  [tabindex='-1']:focus {
+    outline: none;
+  }
+
+  h1,
+  h2,
+  h3 {
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+}
+
+@layer components {
+  /* Restrained uppercase technical label */
+  .label {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    line-height: 1.4;
+  }
+
+  /* Fine technical grid used behind selected sections */
+  .grid-lines {
+    background-image:
+      linear-gradient(to right, rgb(156 163 175 / 0.07) 1px, transparent 1px),
+      linear-gradient(to bottom, rgb(156 163 175 / 0.07) 1px, transparent 1px);
+    background-size: 72px 72px;
+  }
+
+  /* Content the site owner still needs to supply */
+  .placeholder {
+    display: inline;
+    font-family: var(--font-mono);
+    font-size: 0.85em;
+    color: rgb(182 255 74 / 0.85);
+    background: rgb(182 255 74 / 0.06);
+    outline: 1px dashed rgb(182 255 74 / 0.45);
+    outline-offset: 1px;
+    border-radius: 3px;
+    padding: 0.05em 0.35em;
+    box-decoration-break: clone;
+    -webkit-box-decoration-break: clone;
+  }
+
+  .link-underline {
+    background-image: linear-gradient(currentColor, currentColor);
+    background-size: 0% 1px;
+    background-position: 0 100%;
+    background-repeat: no-repeat;
+    transition: background-size 0.4s var(--ease-out-expo);
+  }
+  .link-underline:hover,
+  .link-underline:focus-visible {
+    background-size: 100% 1px;
+  }
+}
+
+/* Labels on the interactive skills graph, positioned by the render loop */
+.graph-label__text {
+  display: block;
+  white-space: nowrap;
+  transform: translate(-50%, calc(-100% - 12px));
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.04em;
+  color: var(--color-muted);
+  padding: 0.2rem 0.5rem;
+  border-radius: 999px;
+  background: rgb(9 11 15 / 0.75);
+  border: 1px solid var(--color-line);
+  transition:
+    color 0.25s,
+    border-color 0.25s,
+    background-color 0.25s;
+}
+.graph-label[data-kind='project'] .graph-label__text {
+  color: var(--color-lime);
+}
+.graph-label[data-kind='group'] .graph-label__text,
+.graph-label[data-kind='core'] .graph-label__text {
+  color: var(--color-fg);
+}
+.graph-label[data-kind='core'] .graph-label__text {
+  transform: translate(-50%, calc(-100% - 34px));
+}
+.graph-label[data-state='focus'] .graph-label__text {
+  color: var(--color-ink);
+  background: var(--color-lime);
+  border-color: var(--color-lime);
+}
+
+/* Scroll cue in the hero */
+@keyframes scroll-cue {
+  0% {
+    transform: translateY(-100%);
+  }
+  100% {
+    transform: translateY(250%);
+  }
+}
+
+.scroll-cue::after {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 40%;
+  background: var(--color-lime);
+  animation: scroll-cue 2.2s var(--ease-out-expo) infinite;
+}
+
+/*
+ * Supernova transition into a case study (driven by Layout). --x/--y: blast origin;
+ * --core: radius of the bright core; --veil: darkness around it; --hole: radius of the shockwave's opening, through
+ * which the new page shows; --ring: brightness of the shockwave's edge. The flash stays
+ * soft: a small bright core fading to near-black, never a full-screen white.
+ */
+.supernova__fill,
+.supernova__ring {
+  position: absolute;
+  inset: 0;
+}
+
+.supernova__fill {
+  background: radial-gradient(
+    circle at var(--x) var(--y),
+    #f5ffe6 0,
+    #d4ff8a calc(var(--core) * 0.5),
+    rgba(182, 255, 74, 0.55) var(--core),
+    rgba(182, 255, 74, 0.12) calc(var(--core) * 4),
+    rgba(9, 11, 15, var(--veil, 0.95)) calc(var(--core) * 9)
+  );
+  -webkit-mask-image: radial-gradient(circle at var(--x) var(--y), transparent var(--hole), #000 calc(var(--hole) + 60px));
+  mask-image: radial-gradient(circle at var(--x) var(--y), transparent var(--hole), #000 calc(var(--hole) + 60px));
+}
+
+.supernova__ring {
+  opacity: var(--ring, 1);
+  background: radial-gradient(
+    circle at var(--x) var(--y),
+    transparent calc(var(--hole) - 2px),
+    rgba(230, 255, 190, 0.95) calc(var(--hole) + 2px),
+    rgba(182, 255, 74, 0.4) calc(var(--hole) + 16px),
+    transparent calc(var(--hole) + 48px)
+  );
+}
+
+/*
+ * Sphere telemetry callouts. Each one's text "types" out from the end of its
+ * leader line once the line has drawn (data-shown is set by the render loop).
+ */
+.telemetry-text {
+  opacity: 0;
+  clip-path: inset(0 100% 0 0);
+  /*
+   * No backing plate: a tight dark halo around the letters separates them from
+   * the lime ring where it passes behind, and is invisible against the void.
+   */
+  text-shadow:
+    0 0 2px var(--color-ink),
+    0 0 4px var(--color-ink),
+    0 0 10px var(--color-ink),
+    0 0 18px var(--color-ink);
+  transition:
+    clip-path 0.5s steps(18, end),
+    opacity 0.15s ease-out;
+}
+
+.telemetry-text[data-side='left'] {
+  text-align: right;
+  clip-path: inset(0 0 0 100%);
+}
+
+.telemetry-text[data-side='left'] .inline-flex {
+  justify-content: flex-end;
+}
+
+.telemetry-text[data-shown] {
+  opacity: 1;
+  clip-path: inset(0 0 0 0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
